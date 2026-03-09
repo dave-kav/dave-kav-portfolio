@@ -1,130 +1,45 @@
 # dave-kav-portfolio
 
-Monorepo containing all portfolio sites and supporting infrastructure.
-
-## Architecture
-
-```mermaid
-graph TB
-    subgraph "Monorepo"
-        subgraph "apps/"
-            COM[apps/com<br/>dave-kav.com]
-            DEV[apps/dev<br/>dave-kav.dev]
-            RESUME[apps/resume<br/>Resume Generator]
-        end
-
-        subgraph "packages/"
-            CONFIG[packages/config<br/>Shared Data]
-            DATA[(data/*.json)]
-        end
-
-        CONFIG --> DATA
-        COM -->|imports| CONFIG
-        DEV -->|imports| CONFIG
-        RESUME -->|reads| DATA
-    end
-
-    subgraph "Cloudflare"
-        CF_COM[Pages<br/>dave-kav.com]
-        CF_DEV[Pages<br/>dave-kav.dev]
-        CF_R2[(R2 Bucket<br/>resume.pdf)]
-    end
-
-    COM -->|deploy| CF_COM
-    DEV -->|deploy| CF_DEV
-    RESUME -->|upload| CF_R2
-
-    CF_COM -.->|link| CF_R2
-```
-
-## CI/CD Workflow
-
-```mermaid
-flowchart LR
-    subgraph "Git Push"
-        PUSH((push to main))
-    end
-
-    subgraph "Path Filters"
-        PUSH --> P1{apps/com/**<br/>OR<br/>packages/config/**}
-        PUSH --> P2{apps/dev/**<br/>OR<br/>packages/config/**}
-        PUSH --> P3{apps/resume/**<br/>OR<br/>packages/config/data/**}
-    end
-
-    subgraph "Workflows"
-        P1 -->|yes| W1[deploy-com.yml]
-        P2 -->|yes| W2[deploy-dev.yml]
-        P3 -->|yes| W3[build-resume.yml]
-    end
-
-    subgraph "Deployments"
-        W1 --> D1[Cloudflare Pages]
-        W2 --> D2[Cloudflare Pages]
-        W3 --> D3[Cloudflare R2]
-    end
-```
+Monorepo for personal portfolio sites.
 
 ## Structure
 
 ```
 dave-kav-portfolio/
 ├── apps/
-│   ├── com/              # dave-kav.com - Main portfolio site
-│   ├── dev/              # dave-kav.dev - Terminal-style site
-│   └── resume/           # LaTeX resume generator
+│   ├── com/        # dave-kav.com - Editorial portfolio
+│   ├── dev/        # dave-kav.dev - Terminal interface
+│   └── resume/     # LaTeX resume generator
 ├── packages/
-│   └── config/           # Shared config data
-│       ├── index.ts      # Exports all data + types
-│       └── data/         # JSON config files
-└── .github/workflows/    # Path-filtered CI/CD workflows
+│   └── config/     # Shared data (JSON) + TypeScript types
+└── .github/
+    └── workflows/  # Path-filtered CI/CD
 ```
 
-## Data Flow
+## How It Works
 
-All apps import config data directly at **build time** via the `@dave-kav/config` workspace package:
-
-```typescript
-import { experienceData, educationData } from '@dave-kav/config';
-```
-
-This approach:
-- Eliminates runtime API calls
-- Bakes data into the build for faster page loads
-- Automatically rebuilds sites when config changes (via path filters)
+- **Shared config**: All apps import from `@dave-kav/config` at build time
+- **Path-filtered CI**: Changes to `packages/config/` trigger rebuilds of dependent apps
+- **Resume**: Generated from config data, compiled to PDF, uploaded to R2
 
 ## Development
 
 ```bash
-# Install dependencies
 pnpm install
-
-# Run dave-kav.com locally
-pnpm dev:com
-
-# Run dave-kav.dev locally
-pnpm dev:dev
-
-# Generate resume
-cd apps/resume && node scripts/generate.js
+pnpm dev:com    # Run dave-kav.com locally
+pnpm dev:dev    # Run dave-kav.dev locally
 ```
 
-## Workflows
+## Deployment
 
-| Workflow | Triggers On | Deploys To |
-|----------|-------------|------------|
-| `deploy-com.yml` | `apps/com/**`, `packages/config/**` | Cloudflare Pages |
-| `deploy-dev.yml` | `apps/dev/**`, `packages/config/**` | Cloudflare Pages |
-| `build-resume.yml` | `apps/resume/**`, `packages/config/data/**` | Cloudflare R2 |
-
-**Key behavior:** Changing `packages/config/data/*.json` triggers rebuilds of both sites AND the resume.
-
-## Secrets Required
-
-- `CLOUDFLARE_API_TOKEN` - Cloudflare API token with Pages/R2 permissions
-- `CLOUDFLARE_ACCOUNT_ID` - Cloudflare account ID
+| App | Trigger Paths | Target |
+|-----|---------------|--------|
+| com | `apps/com/**`, `packages/config/**` | Cloudflare Pages |
+| dev | `apps/dev/**`, `packages/config/**` | Cloudflare Pages |
+| resume | `apps/resume/**`, `packages/config/data/**` | Cloudflare R2 |
 
 ## URLs
 
-- **dave-kav.com**: https://dave-kav.com
-- **dave-kav.dev**: https://dave-kav.dev
-- **Resume PDF**: https://pub-6c7cf0c817ad49ecaa8fa77083a1a590.r2.dev/resume.pdf
+- https://dave-kav.com
+- https://dave-kav.dev
+- https://pub-6c7cf0c817ad49ecaa8fa77083a1a590.r2.dev/resume.pdf

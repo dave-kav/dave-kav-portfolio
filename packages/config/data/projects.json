@@ -3,19 +3,18 @@
     {
       "id": 1,
       "title": "This Website",
-      "description": "A personal portfolio with an editorial design aesthetic, built with React, TypeScript, and Claude Code",
-      "repo": "https://github.com/dave-kav/dave-kav-com",
+      "description": "Personal portfolio monorepo with editorial and terminal-style sites, built with React, TypeScript, and Claude Code",
+      "repo": "https://github.com/dave-kav/dave-kav-portfolio",
       "tech": [
         "React",
         "TypeScript",
-        "Framer Motion",
-        "Cloudflare Workers",
+        "pnpm Workspaces",
         "Cloudflare Pages"
       ],
       "highlights": [
-        "3-repo architecture: shared config served via Cloudflare Worker API",
-        "Sites fetch data at runtime for instant config updates",
-        "Editorial-style layout with CMD+K command palette",
+        "Monorepo with shared config package for type-safe data imports",
+        "Path-filtered GitHub Actions for efficient CI/CD",
+        "LaTeX resume auto-generated from config data",
         "Companion terminal site at dave-kav.dev"
       ],
       "thumbnail": "logo.svg"
@@ -26,7 +25,7 @@
       "description": "A Raycast extension that allows you to search for Irish Rail live departure times",
       "repo": "https://github.com/dave-kav/raycast-irish-rail",
       "tech": [
-        "Typescript",
+        "TypeScript",
         "Raycast SDK"
       ],
       "highlights": [
