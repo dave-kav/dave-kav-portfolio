@@ -1,0 +1,21 @@
+name: Cleanup Preview Deployments
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        app: [com, dev]
+
+    steps:
+      - name: Delete Preview Deployment
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deployment delete dave-kav-${{ matrix.app }} --branch=${{ github.head_ref }} --yes
+        continue-on-error: true  # Don't fail if deployment doesn't exist
