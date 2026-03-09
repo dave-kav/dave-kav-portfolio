@@ -1,0 +1,198 @@
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import './CommandPalette.css';
+
+interface Command {
+  id: string;
+  label: string;
+  icon: string;
+  action: () => void;
+}
+
+const HISTORY_KEY = 'command-palette-history';
+const MAX_HISTORY = 10;
+
+const CommandPalette: React.FC = () => {
+  const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [history, setHistory] = useState<string[]>(() => {
+    try {
+      const stored = localStorage.getItem(HISTORY_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  const baseCommands: Command[] = [
+    {
+      id: 'blogs',
+      label: 'Read Blog',
+      icon: '✎',
+      action: () => navigate('/blogs'),
+    },
+    {
+      id: 'terminal',
+      label: 'Open Terminal',
+      icon: '>_',
+      action: () => window.open('https://dave-kav.dev', '_blank'),
+    },
+    {
+      id: 'github',
+      label: 'View GitHub',
+      icon: '{}',
+      action: () => window.open('https://github.com/dave-kav', '_blank'),
+    },
+    {
+      id: 'linkedin',
+      label: 'View LinkedIn',
+      icon: 'in',
+      action: () => window.open('https://linkedin.com/in/dave-kav', '_blank'),
+    },
+    {
+      id: 'email',
+      label: 'Send Email',
+      icon: '@',
+      action: () => window.location.href = 'mailto:work@dave-kav.com',
+    },
+    {
+      id: 'cv',
+      label: 'Download CV',
+      icon: '↓',
+      action: () => {
+        window.open('https://e176e82e7e125f4726a76dd364ecb66b.r2.cloudflarestorage.com/dave-kav-resume/resume.pdf', '_blank');
+      },
+    },
+  ];
+
+  // Sort commands by recent usage
+  const commands = useMemo(() => {
+    if (history.length === 0) return baseCommands;
+
+    const sorted = [...baseCommands].sort((a, b) => {
+      const aIndex = history.indexOf(a.id);
+      const bIndex = history.indexOf(b.id);
+      if (aIndex === -1 && bIndex === -1) return 0;
+      if (aIndex === -1) return 1;
+      if (bIndex === -1) return -1;
+      return aIndex - bIndex;
+    });
+    return sorted;
+  }, [history]);
+
+  const addToHistory = useCallback((commandId: string) => {
+    setHistory(prev => {
+      const filtered = prev.filter(id => id !== commandId);
+      const updated = [commandId, ...filtered].slice(0, MAX_HISTORY);
+      try {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(updated));
+      } catch {}
+      return updated;
+    });
+  }, []);
+
+  const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      setIsOpen((prev) => !prev);
+      setSelectedIndex(0);
+    }
+    if (!isOpen) return;
+
+    if (e.key === 'Escape') {
+      setIsOpen(false);
+    }
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev + 1) % commands.length);
+    }
+    if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setSelectedIndex((prev) => (prev - 1 + commands.length) % commands.length);
+    }
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      commands[selectedIndex].action();
+      setIsOpen(false);
+    }
+  }, [isOpen, selectedIndex, commands]);
+
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [handleKeyDown]);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
+
+  const handleCommand = (command: Command) => {
+    addToHistory(command.id);
+    command.action();
+    setIsOpen(false);
+  };
+
+  return (
+    <>
+      {/* Mobile trigger button */}
+      <button
+        className="command-palette__mobile-trigger"
+        onClick={() => setIsOpen(true)}
+        aria-label="Open menu"
+      >
+        ⌘
+      </button>
+
+      <AnimatePresence>
+        {isOpen && (
+        <>
+          <motion.div
+            className="command-palette__overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsOpen(false)}
+          />
+          <motion.div
+            className="command-palette"
+            initial={{ opacity: 0, scale: 0.95, y: -20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: -20 }}
+            transition={{ duration: 0.15 }}
+          >
+            <div className="command-palette__header">
+              <span className="command-palette__hint">Actions</span>
+              <kbd>esc</kbd>
+            </div>
+            <ul className="command-palette__list">
+              {commands.map((cmd, index) => (
+                <li key={cmd.id}>
+                  <button
+                    onClick={() => handleCommand(cmd)}
+                    className={index === selectedIndex ? 'selected' : ''}
+                    onMouseEnter={() => setSelectedIndex(index)}
+                  >
+                    <span className="command-palette__icon">{cmd.icon}</span>
+                    <span>{cmd.label}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+    </>
+  );
+};
+
+export default CommandPalette;

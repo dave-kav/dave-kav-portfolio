@@ -1,0 +1,21 @@
+{
+  "name": "@dave-kav/config",
+  "version": "1.0.0",
+  "description": "Config API for dave-kav sites",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20240117.0",
+    "typescript": "^5.3.3",
+    "wrangler": "^3.24.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dave-kav/dave-kav-portfolio-config.git"
+  },
+  "author": "David Kavanagh",
+  "license": "MIT"
+}

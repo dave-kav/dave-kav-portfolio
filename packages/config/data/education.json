@@ -1,0 +1,43 @@
+{
+    "education": [
+        {
+            "id": 1,
+            "school": "University College Dublin",
+            "degree": "Professional Academy Diploma in Leadership and Management",
+            "period": "2025",
+            "location": "Dublin, Ireland",
+            "description": "Completed an intensive leadership development program focused on modern management practices, strategic thinking, and organizational effectiveness. This program enhanced my ability to lead cross-functional teams and drive organizational change.",
+            "highlights": [
+                "Achieved Distinction across all learning outcomes and practical assignments",
+                "Developed advanced coaching and mentoring skills for team development",
+                "Enhanced communication and stakeholder management capabilities"
+            ],
+            "courses": [
+                "Strategic Leadership",
+                "Change Management",
+                "Coaching & Mentoring",
+                "Team Dynamics",
+                "Strategic Planning"
+            ],
+            "logo": "/logos/dcu.png"
+        },
+        {
+            "id": 2,
+            "school": "Munster Technological University",
+            "degree": "Bachelor of Science in Computer Science",
+            "period": "2013 - 2017",
+            "location": "Cork, Ireland",
+            "description": "Graduated with First Class Honours, specializing in distributed systems, advanced algorithms, and software engineering. Developed strong analytical and problem-solving skills through rigorous coursework and hands-on projects.",
+            "highlights": [
+                "Final Year Project: Designed and implemented an Optical Character Recognition (OCR) system tailored for retail betting applications. Utilized open-source technologies to develop a scalable, efficient solution that streamlined data entry processes, reducing manual workload for operators."
+            ],
+            "courses": [
+                "Software Engineering",
+                "Distributed Systems",
+                "Advanced Algorithms",
+                "Database Systems"
+            ],
+            "logo": "/logos/mtu.jpg"
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+node_modules/
+dist/
+build/
+.env
+.env.local
+*.log
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.pdf
+*.synctex.gz
+apps/resume/resume.tex

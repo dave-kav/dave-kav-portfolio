@@ -1,0 +1,44 @@
+name: Build Resume
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/resume/**'
+      - 'packages/config/data/**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/resume
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Generate LaTeX from Config
+        run: node scripts/generate.js
+
+      - name: Compile LaTeX to PDF
+        uses: dante-ev/latex-action@latest
+        with:
+          root_file: apps/resume/resume.tex
+          working_directory: .
+
+      - name: Upload to Cloudflare R2
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: r2 object put dave-kav-resume/resume.pdf --file=apps/resume/resume.pdf

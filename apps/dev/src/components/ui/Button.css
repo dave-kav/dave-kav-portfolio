@@ -1,0 +1,35 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* Variant styles */
+.button--primary {
+  background: var(--color-accent);
+  color: white;
+  border: none;
+}
+
+.button--primary:hover {
+  background: var(--color-accent-dark);
+  transform: translateY(-2px);
+}
+
+.button__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button__text {
+  display: inline-block;
+}

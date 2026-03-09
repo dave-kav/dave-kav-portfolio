@@ -1,0 +1,139 @@
+{
+    "experiences": [
+        {
+            "id": 1,
+            "company": "Whatnot",
+            "role": "Software Engineer",
+            "period": "2025 - Present",
+            "location": "Dublin, Ireland",
+            "description": "Building backend systems and services for the Accounting, Taxes and Reporting domain. Developing robust, scalable solutions to support financial operations at scale.",
+            "highlights": [
+                "Developing and maintaining backend services for financial reporting and tax compliance",
+                "Building scalable data solutions using Python, Snowflake, and DBT",
+                "Collaborating with cross-functional teams to deliver reliable, performant systems"
+            ],
+            "technologies": [
+                "Python",
+                "Snowflake",
+                "DBT",
+                "Teradata",
+                "PostgreSQL",
+                "MySQL",
+                "Datadog"
+            ],
+            "logo": "/logos/whatnot.png"
+        },
+        {
+            "id": 2,
+            "company": "Evervault",
+            "role": "Lead Engineer, Payments",
+            "period": "2024 - 2025",
+            "location": "Dublin, Ireland",
+            "description": "Led the Payments engineering team, responsible for the development and maintenance of the company's payment systems. Spearheaded the development of cloud-native applications on AWS, leveraging Rust for performance-critical components and TypeScript for seamless front-end and server-side logic.",
+            "highlights": [
+                "Led the development of new payment features and integrations, ensuring seamless adoption by clients and internal teams",
+                "Managed the team's technical roadmap and drove improvements in API functionality to enhance performance and developer usability",
+                "Mentored and guided engineers while establishing best practices for system reliability and security",
+                "Utilized Terraform to automate infrastructure provisioning and ensure scalability in dynamic production environments"
+            ],
+            "technologies": [
+                "Rust",
+                "TypeScript",
+                "JavaScript",
+                "React",
+                "AWS",
+                "Terraform",
+                "PostgreSQL"
+            ],
+            "logo": "/logos/evervault.svg"
+        },
+        {
+            "id": 3,
+            "company": "Apata",
+            "role": "Senior Software Engineer",
+            "period": "2022 - 2024",
+            "location": "Dublin, Ireland",
+            "description": "Played a central role in developing a next-generation Authentication and Cardholder Verification System (ACS) tailored for secure and frictionless eCommerce transactions. Focused on delivering robust features using TypeScript and AWS, ensuring system security, performance, and scalability.",
+            "highlights": [
+                "Led the design and development of key system features, leveraging TypeScript and AWS to create a scalable and secure architecture",
+                "Successfully spearheaded a migration project transitioning the codebase from JavaScript to TypeScript, improving code maintainability and robustness",
+                "Collaborated with cross-functional teams to deliver mission-critical milestones on tight deadlines, balancing feature development with technical excellence",
+                "Enhanced system reliability and performance through continuous optimization and rigorous testing"
+            ],
+            "technologies": [
+                "TypeScript",
+                "JavaScript",
+                "Node.js",
+                "AWS",
+                "MySQL",
+                "Redis"
+            ],
+            "logo": "/logos/apata.svg"
+        },
+        {
+            "id": 4,
+            "company": "Salesforce",
+            "role": "Software Engineer",
+            "period": "2021 - 2022",
+            "location": "Dublin, Ireland",
+            "description": "Contributed to the seamless integration of Salesforce's suite of tools into Slack, focusing on the development of user-centric Slack apps and robust backend systems. Leveraged TypeScript for building interactive Slack apps and Java/Spring for backend services, ensuring a cohesive experience for users.",
+            "highlights": [
+                "Developed highly interactive Slack applications using TypeScript, enabling intuitive user interactions with Salesforce services",
+                "Built and maintained backend integrations using Java and Spring, ensuring reliability and performance across the system",
+                "Implemented and managed infrastructure using AWS, Jenkins, and Terraform to streamline CI/CD pipelines and optimize deployment processes",
+                "Provided technical leadership within the team, mentoring junior engineers and promoting best practices in coding and architecture"
+            ],
+            "technologies": [
+                "TypeScript",
+                "Java",
+                "Spring",
+                "AWS",
+                "Jenkins",
+                "Terraform",
+                "PostgreSQL"
+            ],
+            "logo": "/logos/salesforce.png"
+        },
+        {
+            "id": 5,
+            "company": "Workday",
+            "role": "Software Engineer - Distributed Systems",
+            "period": "2017 - 2021",
+            "location": "Dublin, Ireland",
+            "description": "Specialized in maintaining and enhancing a distributed microservices architecture for Workday's integration runtime platform, focusing on high availability and performance. Actively contributed to the development of new features and the improvement of system reliability across large-scale deployments.",
+            "highlights": [
+                "Improved system reliability and performance by implementing key optimizations in the integration runtime platform, reducing latency and downtime",
+                "Led the initiative to create comprehensive Scala onboarding materials, streamlining knowledge transfer for new team members and promoting efficient ramp-up",
+                "Resolved high-priority production support issues, ensuring minimal disruption to clients and maintaining system SLAs",
+                "Participated in architectural planning discussions, offering insights to shape scalable and maintainable solutions for complex problems"
+            ],
+            "technologies": [
+                "Scala",
+                "Java",
+                "Microservices",
+                "Distributed Systems"
+            ],
+            "logo": "/logos/workday.svg"
+        },
+        {
+            "id": 6,
+            "company": "Qumas/Dassault Systèmes",
+            "role": "Software Development Intern",
+            "period": "2016",
+            "location": "Cork, Ireland",
+            "description": "Engaged in research and development projects focused on creating proof-of-concept solutions for efficient data ingestion and indexing. Explored and implemented advanced techniques for handling real-time data streams and big data processing pipelines.",
+            "highlights": [
+                "Worked extensively with real-time data stream processing technologies to handle large volumes of incoming data with low latency",
+                "Acquired hands-on experience in big data processing, focusing on scalability and performance optimization",
+                "Developed and demonstrated prototypes utilizing Apache Spark for distributed data processing and Kafka for real-time data streaming"
+            ],
+            "technologies": [
+                "Apache Spark",
+                "Kafka",
+                "Big Data",
+                "Java"
+            ],
+            "logo": "/logos/dassault.png"
+        }
+    ]
+}

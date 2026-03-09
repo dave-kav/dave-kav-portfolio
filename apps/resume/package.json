@@ -1,0 +1,12 @@
+{
+  "name": "@dave-kav/resume",
+  "version": "1.0.0",
+  "description": "Resume generator using config API data",
+  "type": "module",
+  "scripts": {
+    "generate": "node scripts/generate.js",
+    "build": "npm run generate && pdflatex -interaction=nonstopmode resume.tex"
+  },
+  "author": "David Kavanagh",
+  "license": "MIT"
+}

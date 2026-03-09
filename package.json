@@ -1,0 +1,16 @@
+{
+  "name": "dave-kav-portfolio",
+  "private": true,
+  "scripts": {
+    "build": "pnpm -r build",
+    "build:com": "pnpm --filter @dave-kav/com build",
+    "build:dev": "pnpm --filter @dave-kav/dev build",
+    "build:config": "pnpm --filter @dave-kav/config build",
+    "dev:com": "pnpm --filter @dave-kav/com dev",
+    "dev:dev": "pnpm --filter @dave-kav/dev dev"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
+  "packageManager": "pnpm@9.0.0"
+}

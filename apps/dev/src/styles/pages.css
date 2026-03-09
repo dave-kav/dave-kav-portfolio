@@ -1,0 +1,10 @@
+.blogs-page {
+  padding-top: var(--nav-height);
+  min-height: 100vh;
+  background: var(--color-background);
+}
+
+.home-page {
+  min-height: 100vh;
+  background: var(--color-background);
+} 

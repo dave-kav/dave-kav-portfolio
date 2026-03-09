@@ -1,0 +1,27 @@
+{
+    "$schema": "https://json.schemastore.org/tsconfig",
+    "display": "Default",
+    "compilerOptions": {
+      "jsx": "react",
+      "module": "CommonJS",
+      "moduleResolution": "node",
+      "preserveConstEnums": true,
+      "sourceMap": false,
+      "target": "es2020",
+      "composite": false,
+      "declaration": true,
+      "declarationMap": true,
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+      "inlineSources": false,
+      "isolatedModules": true,
+      "noEmit": true,
+      "noImplicitAny": true,
+      "noUnusedLocals": false,
+      "noUnusedParameters": false,
+      "preserveWatchOutput": true,
+      "skipLibCheck": true,
+      "strict": true,
+      "resolveJsonModule": true
+    }
+  }
