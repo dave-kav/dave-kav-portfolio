@@ -1,38 +1,44 @@
-import { useState, useEffect } from 'react';
+import {
+  experienceData,
+  educationData,
+  projectsData,
+  blogsData,
+  profileData,
+  type ExperienceItem,
+  type EducationItem,
+  type ProjectItem,
+  type BlogItem,
+  type ExperienceData,
+  type EducationData,
+  type ProjectsData,
+  type BlogsData,
+} from '@dave-kav/config';
 
-const CONFIG_API = process.env.REACT_APP_CONFIG_API || 'https://dave-kav-portfolio-config.davykav87.workers.dev';
-
-const cache: Record<string, unknown> = {};
+const configMap: Record<string, unknown> = {
+  experience: experienceData,
+  education: educationData,
+  projects: projectsData,
+  blogs: blogsData,
+  profile: profileData,
+};
 
 export function useConfig<T>(file: string): { data: T | null; loading: boolean; error: Error | null } {
-  const [data, setData] = useState<T | null>(() => (cache[file] as T) || null);
-  const [loading, setLoading] = useState(!cache[file]);
-  const [error, setError] = useState<Error | null>(null);
+  const data = configMap[file] as T | undefined;
 
-  useEffect(() => {
-    if (cache[file]) {
-      setData(cache[file] as T);
-      setLoading(false);
-      return;
-    }
-
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${CONFIG_API}/api/${file}`);
-        if (!response.ok) throw new Error(`Failed to fetch ${file}`);
-        const json = await response.json();
-        cache[file] = json;
-        setData(json);
-      } catch (e) {
-        setError(e instanceof Error ? e : new Error('Unknown error'));
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [file]);
-
-  return { data, loading, error };
+  return {
+    data: data ?? null,
+    loading: false,
+    error: data ? null : new Error(`Unknown config file: ${file}`),
+  };
 }
 
+export type {
+  ExperienceItem,
+  EducationItem,
+  ProjectItem,
+  BlogItem,
+  ExperienceData,
+  EducationData,
+  ProjectsData,
+  BlogsData,
+};

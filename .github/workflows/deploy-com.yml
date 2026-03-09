@@ -5,14 +5,12 @@ on:
     branches: [main]
     paths:
       - 'apps/com/**'
+      - 'packages/config/**'
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: apps/com
 
     steps:
       - name: Checkout
@@ -31,15 +29,14 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Type Check
-        run: pnpm tsc --noEmit
+        run: pnpm --filter @dave-kav/com tsc --noEmit
 
       - name: Build React App
-        run: pnpm build
+        run: pnpm --filter @dave-kav/com build
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy build --project-name=dave-kav-com
-          workingDirectory: apps/com
+          command: pages deploy apps/com/build --project-name=dave-kav-com

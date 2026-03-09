@@ -11,9 +11,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: apps/resume
 
     steps:
       - name: Checkout
@@ -24,11 +21,9 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install Dependencies
-        run: npm install
-
       - name: Generate LaTeX from Config
-        run: node scripts/generate.js
+        run: node apps/resume/scripts/generate.js
+        working-directory: apps/resume
 
       - name: Compile LaTeX to PDF
         uses: dante-ev/latex-action@latest
