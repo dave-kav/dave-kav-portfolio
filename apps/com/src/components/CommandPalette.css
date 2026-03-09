@@ -54,6 +54,21 @@
   align-items: center;
   padding: 12px 16px;
   border-bottom: 1px solid #eee;
+  gap: 12px;
+}
+
+.command-palette__input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-family: inherit;
+  background: transparent;
+  color: #111;
+}
+
+.command-palette__input::placeholder {
+  color: #999;
 }
 
 .command-palette__hint {
@@ -112,4 +127,11 @@
   font-size: 0.8rem;
   font-weight: 600;
   font-family: 'SF Mono', Monaco, monospace;
+}
+
+.command-palette__empty {
+  padding: 24px 12px;
+  text-align: center;
+  color: #999;
+  font-size: 0.9rem;
 }

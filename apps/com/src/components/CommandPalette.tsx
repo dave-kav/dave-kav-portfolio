@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import './CommandPalette.css';
@@ -17,6 +17,8 @@ const CommandPalette: React.FC = () => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [query, setQuery] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
   const [history, setHistory] = useState<string[]>(() => {
     try {
       const stored = localStorage.getItem(HISTORY_KEY);
@@ -67,11 +69,23 @@ const CommandPalette: React.FC = () => {
     },
   ];
 
-  // Sort commands by recent usage
+  // Sort commands by recent usage and filter by query
   const commands = useMemo(() => {
-    if (history.length === 0) return baseCommands;
+    let filtered = baseCommands;
 
-    const sorted = [...baseCommands].sort((a, b) => {
+    // Filter by query
+    if (query) {
+      const lowerQuery = query.toLowerCase();
+      filtered = baseCommands.filter(cmd =>
+        cmd.label.toLowerCase().includes(lowerQuery) ||
+        cmd.id.toLowerCase().includes(lowerQuery)
+      );
+    }
+
+    // Sort by recent usage
+    if (history.length === 0) return filtered;
+
+    const sorted = [...filtered].sort((a, b) => {
       const aIndex = history.indexOf(a.id);
       const bIndex = history.indexOf(b.id);
       if (aIndex === -1 && bIndex === -1) return 0;
@@ -80,7 +94,7 @@ const CommandPalette: React.FC = () => {
       return aIndex - bIndex;
     });
     return sorted;
-  }, [history]);
+  }, [history, query]);
 
   const addToHistory = useCallback((commandId: string) => {
     setHistory(prev => {
@@ -96,13 +110,19 @@ const CommandPalette: React.FC = () => {
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
       e.preventDefault();
-      setIsOpen((prev) => !prev);
-      setSelectedIndex(0);
+      setIsOpen((prev) => {
+        if (!prev) {
+          setQuery('');
+          setSelectedIndex(0);
+        }
+        return !prev;
+      });
     }
     if (!isOpen) return;
 
     if (e.key === 'Escape') {
       setIsOpen(false);
+      setQuery('');
     }
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -112,12 +132,14 @@ const CommandPalette: React.FC = () => {
       e.preventDefault();
       setSelectedIndex((prev) => (prev - 1 + commands.length) % commands.length);
     }
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && commands.length > 0) {
       e.preventDefault();
+      addToHistory(commands[selectedIndex].id);
       commands[selectedIndex].action();
       setIsOpen(false);
+      setQuery('');
     }
-  }, [isOpen, selectedIndex, commands]);
+  }, [isOpen, selectedIndex, commands, addToHistory]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
@@ -127,6 +149,7 @@ const CommandPalette: React.FC = () => {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      inputRef.current?.focus();
     } else {
       document.body.style.overflow = '';
     }
@@ -134,6 +157,11 @@ const CommandPalette: React.FC = () => {
       document.body.style.overflow = '';
     };
   }, [isOpen]);
+
+  // Reset selection when filtered results change
+  useEffect(() => {
+    setSelectedIndex(0);
+  }, [query]);
 
   const handleCommand = (command: Command) => {
     addToHistory(command.id);
@@ -170,22 +198,33 @@ const CommandPalette: React.FC = () => {
             transition={{ duration: 0.15 }}
           >
             <div className="command-palette__header">
-              <span className="command-palette__hint">Actions</span>
+              <input
+                ref={inputRef}
+                type="text"
+                className="command-palette__input"
+                placeholder="Type to filter..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
               <kbd>esc</kbd>
             </div>
             <ul className="command-palette__list">
-              {commands.map((cmd, index) => (
-                <li key={cmd.id}>
-                  <button
-                    onClick={() => handleCommand(cmd)}
-                    className={index === selectedIndex ? 'selected' : ''}
-                    onMouseEnter={() => setSelectedIndex(index)}
-                  >
-                    <span className="command-palette__icon">{cmd.icon}</span>
-                    <span>{cmd.label}</span>
-                  </button>
-                </li>
-              ))}
+              {commands.length === 0 ? (
+                <li className="command-palette__empty">No matching commands</li>
+              ) : (
+                commands.map((cmd, index) => (
+                  <li key={cmd.id}>
+                    <button
+                      onClick={() => handleCommand(cmd)}
+                      className={index === selectedIndex ? 'selected' : ''}
+                      onMouseEnter={() => setSelectedIndex(index)}
+                    >
+                      <span className="command-palette__icon">{cmd.icon}</span>
+                      <span>{cmd.label}</span>
+                    </button>
+                  </li>
+                ))
+              )}
             </ul>
           </motion.div>
         </>
