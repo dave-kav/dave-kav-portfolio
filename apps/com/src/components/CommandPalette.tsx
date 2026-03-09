@@ -1,14 +1,8 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Command } from '../types/common';
 import './CommandPalette.css';
-
-interface Command {
-  id: string;
-  label: string;
-  icon: string;
-  action: () => void;
-}
 
 const HISTORY_KEY = 'command-palette-history';
 const MAX_HISTORY = 10;

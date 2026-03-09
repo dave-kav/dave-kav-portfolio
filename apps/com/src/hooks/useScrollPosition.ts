@@ -1,13 +1,5 @@
 import { useState, useEffect } from 'react';
-
-type ScrollDirection = 'up' | 'down';
-
-interface ScrollPosition {
-  x: number;
-  y: number;
-  lastY: number;
-  direction: ScrollDirection;
-}
+import { ScrollPosition } from '../types/common';
 
 export const useScrollPosition = (): ScrollPosition => {
   const [scrollPosition, setScrollPosition] = useState<ScrollPosition>({

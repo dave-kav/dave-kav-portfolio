@@ -1,11 +1,5 @@
 import { useState, useEffect, RefObject } from 'react';
-
-interface IntersectionObserverOptions {
-  threshold?: number;
-  root?: Element | Document | null;
-  rootMargin?: string;
-  freezeOnceVisible?: boolean;
-}
+import { IntersectionObserverOptions } from '../types/common';
 
 export const useIntersectionObserver = (
   elementRef: RefObject<Element>,

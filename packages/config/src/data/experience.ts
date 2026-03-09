@@ -43,10 +43,8 @@ export const experiences: ExperienceItem[] = [
     description:
       'Played a central role in developing a next-generation Authentication and Cardholder Verification System (ACS) tailored for secure and frictionless eCommerce transactions. Focused on delivering robust features using TypeScript and AWS, ensuring system security, performance, and scalability.',
     highlights: [
-      'Led the design and development of key system features, leveraging TypeScript and AWS to create a scalable and secure architecture',
-      'Successfully spearheaded a migration project transitioning the codebase from JavaScript to TypeScript, improving code maintainability and robustness',
-      'Collaborated with cross-functional teams to deliver mission-critical milestones on tight deadlines, balancing feature development with technical excellence',
-      'Enhanced system reliability and performance through continuous optimization and rigorous testing',
+      'Led the design and development of key system features using TypeScript and AWS for a scalable, secure architecture',
+      'Spearheaded migration from JavaScript to TypeScript, improving code maintainability across the codebase',
     ],
     technologies: ['TypeScript', 'JavaScript', 'Node.js', 'AWS', 'MySQL', 'Redis'],
     logo: '/logos/apata.svg',
@@ -60,10 +58,8 @@ export const experiences: ExperienceItem[] = [
     description:
       "Contributed to the seamless integration of Salesforce's suite of tools into Slack, focusing on the development of user-centric Slack apps and robust backend systems. Leveraged TypeScript for building interactive Slack apps and Java/Spring for backend services, ensuring a cohesive experience for users.",
     highlights: [
-      'Developed highly interactive Slack applications using TypeScript, enabling intuitive user interactions with Salesforce services',
-      'Built and maintained backend integrations using Java and Spring, ensuring reliability and performance across the system',
-      'Implemented and managed infrastructure using AWS, Jenkins, and Terraform to streamline CI/CD pipelines and optimize deployment processes',
-      'Provided technical leadership within the team, mentoring junior engineers and promoting best practices in coding and architecture',
+      'Built interactive Slack apps in TypeScript and backend integrations with Java/Spring',
+      'Managed infrastructure and CI/CD pipelines using AWS, Jenkins, and Terraform',
     ],
     technologies: ['TypeScript', 'Java', 'Spring', 'AWS', 'Jenkins', 'Terraform', 'PostgreSQL'],
     logo: '/logos/salesforce.png',
@@ -75,12 +71,10 @@ export const experiences: ExperienceItem[] = [
     period: '2017 - 2021',
     location: 'Dublin, Ireland',
     description:
-      "Specialized in maintaining and enhancing a distributed microservices architecture for Workday's integration runtime platform, focusing on high availability and performance. Actively contributed to the development of new features and the improvement of system reliability across large-scale deployments.",
+      "Worked on Workday's distributed integration runtime platform, building and maintaining microservices focused on high availability and performance at scale.",
     highlights: [
-      'Improved system reliability and performance by implementing key optimizations in the integration runtime platform, reducing latency and downtime',
-      'Led the initiative to create comprehensive Scala onboarding materials, streamlining knowledge transfer for new team members and promoting efficient ramp-up',
-      'Resolved high-priority production support issues, ensuring minimal disruption to clients and maintaining system SLAs',
-      'Participated in architectural planning discussions, offering insights to shape scalable and maintainable solutions for complex problems',
+      'Optimized the integration runtime platform to reduce latency and improve uptime',
+      'Resolved high-priority production issues while maintaining system SLAs',
     ],
     technologies: ['Scala', 'Java', 'Microservices', 'Distributed Systems'],
     logo: '/logos/workday.svg',
@@ -92,11 +86,10 @@ export const experiences: ExperienceItem[] = [
     period: '2016',
     location: 'Cork, Ireland',
     description:
-      'Engaged in research and development projects focused on creating proof-of-concept solutions for efficient data ingestion and indexing. Explored and implemented advanced techniques for handling real-time data streams and big data processing pipelines.',
+      'Built proof-of-concept solutions for data ingestion and indexing, working with real-time streaming and big data processing pipelines.',
     highlights: [
-      'Worked extensively with real-time data stream processing technologies to handle large volumes of incoming data with low latency',
-      'Acquired hands-on experience in big data processing, focusing on scalability and performance optimization',
-      'Developed and demonstrated prototypes utilizing Apache Spark for distributed data processing and Kafka for real-time data streaming',
+      'Built prototypes using Apache Spark for distributed processing and Kafka for streaming',
+      'Implemented real-time data stream processing for high-volume, low-latency data handling',
     ],
     technologies: ['Apache Spark', 'Kafka', 'Big Data', 'Java'],
     logo: '/logos/dassault.png',

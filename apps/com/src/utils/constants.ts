@@ -1,9 +1,4 @@
-interface SocialLinks {
-  github: string;
-  linkedin: string;
-  substack: string;
-  email: string;
-}
+import { SocialLinks } from '../types/common';
 
 export const SOCIAL_LINKS: SocialLinks = {
   github: 'https://github.com/dave-kav',
