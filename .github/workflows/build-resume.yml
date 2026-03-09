@@ -11,6 +11,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/resume
 
     steps:
       - name: Checkout
@@ -22,14 +25,13 @@ jobs:
           node-version: "20"
 
       - name: Generate LaTeX from Config
-        run: node apps/resume/scripts/generate.js
-        working-directory: apps/resume
+        run: node scripts/generate.js
 
       - name: Compile LaTeX to PDF
         uses: dante-ev/latex-action@latest
         with:
-          root_file: apps/resume/resume.tex
-          working_directory: .
+          root_file: resume.tex
+          working_directory: apps/resume
 
       - name: Upload to Cloudflare R2
         uses: cloudflare/wrangler-action@v3
