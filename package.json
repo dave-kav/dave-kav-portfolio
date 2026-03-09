@@ -10,7 +10,8 @@
     "dev:dev": "pnpm --filter @dave-kav/dev dev"
   },
   "devDependencies": {
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "wrangler": "^3.90.0"
   },
   "packageManager": "pnpm@9.0.0"
 }
