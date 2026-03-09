@@ -532,7 +532,10 @@ Contact established! Reach out at work@dave-kav.com
 
       case 'exit':
       case 'quit':
-        addOutput('Thanks for visiting! (But you can\'t really exit... try refreshing the page 😄)');
+        addOutput('Goodbye! Redirecting to dave-kav.com...');
+        setTimeout(() => {
+          window.location.href = 'https://dave-kav.com';
+        }, 500);
         break;
 
       case 'curl':

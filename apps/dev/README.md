@@ -37,7 +37,7 @@ The site is automatically deployed via GitHub Actions when changes are pushed to
 1. Builds the React application
 2. Compiles the resume from LaTeX to PDF
 3. Deploys to GitHub Pages
-4. Serves via custom domain at [dave-kav.com](https://www.dave-kav.com)
+4. Serves via custom domain at [dave-kav.com](https://dave-kav.com)
 
 ## Local Development
 
