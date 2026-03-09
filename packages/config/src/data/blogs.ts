@@ -1,0 +1,18 @@
+import type { BlogItem } from '../types.js';
+
+export const blogs: BlogItem[] = [
+  {
+    id: 1,
+    title: 'Understanding Rust',
+    description: 'A deep dive into the Rust programming language.',
+    date: '2023-10-01',
+    link: 'https://your-substack-link.com/understanding-rust',
+  },
+  {
+    id: 2,
+    title: 'TypeScript Tips',
+    description: 'Improve your TypeScript skills with these tips.',
+    date: '2023-09-15',
+    link: 'https://your-substack-link.com/typescript-tips',
+  },
+];

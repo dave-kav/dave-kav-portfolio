@@ -1,0 +1,22 @@
+import type { Profile } from '../types.js';
+
+export const profile: Profile = {
+  name: 'David Kavanagh',
+  title: 'Software Engineer',
+  location: 'Dublin, Ireland',
+  email: 'work@dave-kav.com',
+  phone: '083 427 4918',
+  website: 'dave-kav.com',
+  linkedin: 'dave-kav',
+  github: 'dave-kav',
+  summary:
+    'Senior Software Engineer with 8+ years of experience designing, developing, and deploying scalable, cloud-native software solutions. Adept at API development, distributed systems, and enhancing developer workflows. Proven leadership and management in cross-functional teams, delivering impactful projects, and driving technical excellence in dynamic environments.',
+  skills: {
+    languages: 'Python, Rust, TypeScript, JavaScript, Terraform, Java, Scala',
+    data: 'Snowflake, DBT, PostgreSQL, MySQL, Redis',
+    tools: 'AWS, Docker, Datadog',
+    architecture: 'Data Pipelines, Microservices, REST APIs, Event-Driven Systems',
+    devops: 'CI/CD, IaC, Monitoring & Logging',
+    leadership: 'Agile, Mentorship, Team Collaboration, Design',
+  },
+};

@@ -1,15 +1,5 @@
-import { readFileSync, writeFileSync } from 'fs';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const CONFIG_DIR = join(__dirname, '../../../packages/config/data');
-
-function loadConfig(filename) {
-  const filepath = join(CONFIG_DIR, `${filename}.json`);
-  return JSON.parse(readFileSync(filepath, 'utf-8'));
-}
+import { writeFileSync } from 'fs';
+import { experiences, education, profile } from '@dave-kav/config';
 
 function escapeLatex(str) {
   return str
@@ -42,8 +32,8 @@ ${highlights}
   }).join('\n\n');
 }
 
-function generateEducation(education) {
-  return education.map(edu => {
+function generateEducation(educationList) {
+  return educationList.map(edu => {
     const highlights = edu.highlights
       ? edu.highlights.map(h => `    \\item ${escapeLatex(h)}`).join('\n')
       : '';
@@ -60,15 +50,7 @@ ${highlights}
 }
 
 function generate() {
-  console.log('Loading config data from packages/config/data...');
-
-  const expData = loadConfig('experience');
-  const eduData = loadConfig('education');
-  const profileData = loadConfig('profile');
-
-  const experiences = expData.experiences;
-  const education = eduData.education;
-  const profile = profileData.profile;
+  console.log('Loading config data from @dave-kav/config...');
 
   const latex = `\\documentclass[10pt,a4paper,sans]{moderncv}
 \\moderncvstyle{classic}

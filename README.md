@@ -11,7 +11,7 @@ dave-kav-portfolio/
 │   ├── dev/        # dave-kav.dev - Terminal interface
 │   └── resume/     # LaTeX resume generator
 ├── packages/
-│   └── config/     # Shared data (JSON) + TypeScript types
+│   └── config/     # Shared data and types (TypeScript)
 └── .github/
     └── workflows/  # Path-filtered CI/CD
 ```

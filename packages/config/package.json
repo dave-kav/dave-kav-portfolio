@@ -2,15 +2,21 @@
   "name": "@dave-kav/config",
   "version": "1.0.0",
   "description": "Shared config data for dave-kav portfolio",
+  "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
   "scripts": {
     "build": "tsc",
     "clean": "rm -rf dist"
   },
   "files": [
-    "dist",
-    "data"
+    "dist"
   ],
   "devDependencies": {
     "typescript": "^5.3.3"

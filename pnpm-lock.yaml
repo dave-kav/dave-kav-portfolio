@@ -167,7 +167,11 @@ importers:
         specifier: 4.9.5
         version: 4.9.5
 
-  apps/resume: {}
+  apps/resume:
+    dependencies:
+      '@dave-kav/config':
+        specifier: workspace:*
+        version: link:../../packages/config
 
   packages/config:
     devDependencies:

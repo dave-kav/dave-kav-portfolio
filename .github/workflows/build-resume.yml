@@ -5,7 +5,7 @@ on:
     branches: [main]
     paths:
       - 'apps/resume/**'
-      - 'packages/config/data/**'
+      - 'packages/config/**'
   workflow_dispatch:
 
 jobs:
@@ -30,6 +30,10 @@ jobs:
 
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
+        working-directory: .
+
+      - name: Build Config Package
+        run: pnpm --filter @dave-kav/config build
         working-directory: .
 
       - name: Generate LaTeX from Config
