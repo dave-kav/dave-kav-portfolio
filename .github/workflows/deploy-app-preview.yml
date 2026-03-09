@@ -10,6 +10,10 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
 
     steps:
       - name: Checkout
@@ -37,16 +41,11 @@ jobs:
         run: pnpm --filter @dave-kav/${{ inputs.app }} build
 
       - name: Deploy to Cloudflare Pages
-        id: deploy
-        uses: cloudflare/wrangler-action@v3
+        uses: andykenward/github-actions-cloudflare-pages@v3.0.0
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy apps/${{ inputs.app }}/build --project-name=dave-kav-${{ inputs.app }} --branch=${{ github.head_ref }}
-
-      - name: Comment Preview URL on PR
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const script = require('./.github/scripts/comment-preview-url.js');
-            await script({ github, context, app: '${{ inputs.app }}', url: '${{ steps.deploy.outputs.deployment-url }}' });
+          cloudflare-api-token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          cloudflare-account-id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          cloudflare-project-name: dave-kav-${{ inputs.app }}
+          directory: apps/${{ inputs.app }}/build
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-environment: preview
