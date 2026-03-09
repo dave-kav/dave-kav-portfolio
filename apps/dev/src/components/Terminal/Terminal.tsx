@@ -1,10 +1,7 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo, ReactNode } from 'react';
 import { useConfig, ExperienceData, EducationData, ProjectsData, ExperienceItem, EducationItem, ProjectItem } from '../../hooks/useConfig';
+import { executeCommand, FileSystem } from './commands';
 import './Terminal.css';
-
-interface FileSystem {
-  [key: string]: string | FileSystem;
-}
 
 const buildFileSystem = (
   isMobile: boolean,
@@ -183,19 +180,6 @@ ${proj.repo ? `REPO: ${proj.repo}` : ''}
   return fs;
 };
 
-const HELP_TEXT = `
-Available commands:
-  help              Show this help message
-  ls [path]         List files in directory
-  cd <dir>          Change directory
-  cat <file>        Display file contents
-  tree              Show directory structure
-  pwd               Print working directory
-  clear             Clear the terminal
-  whoami            Who am I?
-  contact           Show contact information
-`;
-
 interface HistoryEntry {
   type: 'input' | 'output';
   content: string | React.ReactNode;
@@ -337,11 +321,15 @@ export const Terminal: React.FC = () => {
     return '~/' + currentPath.join('/');
   };
 
-  const addOutput = (content: string) => {
+  const addOutput = useCallback((content: string | ReactNode) => {
     setHistory(prev => [...prev, { type: 'output', content }]);
-  };
+  }, []);
 
-  const processCommand = (input: string) => {
+  const clearHistoryFn = useCallback(() => {
+    setHistory([]);
+  }, []);
+
+  const processCommand = useCallback((input: string) => {
     const trimmed = input.trim();
     if (!trimmed) return;
 
@@ -352,424 +340,27 @@ export const Terminal: React.FC = () => {
     const [cmd, ...args] = trimmed.split(' ');
     const arg = args.join(' ');
 
-    switch (cmd.toLowerCase()) {
-      case 'help':
-        addOutput(HELP_TEXT);
-        break;
+    const found = executeCommand(cmd, {
+      args: arg,
+      currentPath,
+      filesystem,
+      commandHistory,
+      addOutput,
+      setCurrentPath,
+      clearHistory: clearHistoryFn,
+      getCurrentDir,
+      resolvePath,
+      getPathCompletions,
+    });
 
-      case 'clear':
-        setHistory([]);
-        break;
-
-      case 'ls': {
-        const resolved = resolvePath(arg);
-        if (!resolved) {
-          addOutput(`ls: ${arg}: No such file or directory`);
-          break;
-        }
-
-        if (typeof resolved.item === 'object') {
-          const keys = Object.keys(resolved.item);
-          const dir = resolved.item;
-          const output = (
-            <span>
-              {keys.map((name, i) => {
-                const isDir = typeof dir[name] === 'object';
-                return (
-                  <React.Fragment key={name}>
-                    {i > 0 && '  '}
-                    <span className={isDir ? 'terminal__dir' : ''}>
-                      {isDir ? `${name}/` : name}
-                    </span>
-                  </React.Fragment>
-                );
-              })}
-            </span>
-          );
-          setHistory(prev => [...prev, { type: 'output', content: output }]);
-        } else {
-          // It's a file, just show the filename
-          addOutput(resolved.name);
-        }
-        break;
-      }
-
-      case 'cd': {
-        if (!arg || arg === '~') {
-          setCurrentPath([]);
-          break;
-        }
-
-        // Build the new path
-        const cleanPath = arg.replace(/\/+$/, '');
-        const parts = cleanPath.split('/').filter(p => p !== '');
-
-        let newPath = cleanPath.startsWith('~') ? [] : [...currentPath];
-        if (parts[0] === '~') parts.shift();
-
-        for (const part of parts) {
-          if (part === '..') {
-            newPath.pop();
-          } else if (part !== '.') {
-            newPath.push(part);
-          }
-        }
-
-        // Verify the path exists and is a directory
-        let current: FileSystem | string = filesystem;
-        let valid = true;
-        for (const dir of newPath) {
-          if (typeof current === 'object' && dir in current && typeof current[dir] === 'object') {
-            current = current[dir];
-          } else {
-            valid = false;
-            break;
-          }
-        }
-
-        if (valid) {
-          setCurrentPath(newPath);
-        } else {
-          addOutput(`cd: no such directory: ${arg}`);
-        }
-        break;
-      }
-
-      case 'cat': {
-        if (!arg) {
-          addOutput('cat: missing file argument');
-          break;
-        }
-
-        // Try exact path resolution first
-        const resolved = resolvePath(arg);
-        if (resolved && typeof resolved.item === 'string') {
-          addOutput(resolved.item);
-          break;
-        }
-
-        // If exact path failed, try partial match in current dir (convenience feature)
-        const dir = getCurrentDir();
-        if (typeof dir === 'object') {
-          const match = Object.keys(dir).find(k =>
-            k.toLowerCase().includes(arg.toLowerCase()) && typeof dir[k] === 'string'
-          );
-          if (match) {
-            addOutput(dir[match] as string);
-            break;
-          }
-        }
-
-        addOutput(`cat: ${arg}: No such file`);
-        break;
-      }
-
-      case 'pwd':
-        addOutput('/' + currentPath.join('/') || '/');
-        break;
-
-      case 'tree': {
-        const buildTree = (obj: FileSystem, prefix = ''): string => {
-          const entries = Object.keys(obj);
-          return entries.map((key, i) => {
-            const isLast = i === entries.length - 1;
-            const connector = isLast ? '└── ' : '├── ';
-            const isDir = typeof obj[key] === 'object';
-            const line = `${prefix}${connector}${isDir ? `📁 ${key}` : `📄 ${key}`}`;
-            if (isDir) {
-              const childPrefix = prefix + (isLast ? '    ' : '│   ');
-              return line + '\n' + buildTree(obj[key] as FileSystem, childPrefix);
-            }
-            return line;
-          }).join('\n');
-        };
-        addOutput('.\n' + buildTree(filesystem));
-        break;
-      }
-
-      case 'whoami':
-        addOutput('david.kavanagh - Software Engineer @ Whatnot');
-        break;
-
-      case 'contact':
-        addOutput(`
-📧 Email:    work@dave-kav.com
-🐙 GitHub:   github.com/dave-kav
-💼 LinkedIn: linkedin.com/in/dave-kav
-🌐 Website:  dave-kav.com
-`);
-        break;
-
-      case 'history':
-        addOutput(commandHistory.map((cmd, i) => `  ${i + 1}  ${cmd}`).join('\n') || 'No commands in history');
-        break;
-
-      // Easter eggs
-      case 'sudo':
-        if (arg.toLowerCase().includes('hire')) {
-          addOutput(`
-🎉 EXCELLENT CHOICE! 🎉
-
-Initiating hiring sequence...
-[████████████████████████████████] 100%
-
-Contact established! Reach out at work@dave-kav.com
-`);
-        } else {
-          addOutput('sudo: nice try, but this is a portfolio website 😄');
-        }
-        break;
-
-      case 'vim':
-      case 'nano':
-      case 'emacs':
-        addOutput(`${cmd}: this is a read-only filesystem (but I do use ${cmd === 'vim' ? 'neovim' : cmd} btw)`);
-        break;
-
-      case 'rm':
-        addOutput('rm: permission denied (nice try though)');
-        break;
-
-      case 'exit':
-      case 'quit':
-        addOutput('Goodbye! Redirecting to dave-kav.com...');
-        setTimeout(() => {
-          window.location.href = 'https://dave-kav.com';
-        }, 500);
-        break;
-
-      case 'curl':
-      case 'wget':
-        addOutput(`${cmd}: I appreciate the enthusiasm, but just use 'cat' here`);
-        break;
-
-      case 'git':
-        addOutput('git: check out my repos at github.com/dave-kav');
-        break;
-
-      case 'coffee':
-      case 'make':
-        if (arg === 'coffee' || cmd === 'coffee') {
-          addOutput(`
-    ( (
-     ) )
-  ........
-  |      |]
-  \\      /
-   \`----'
-
-Coffee brewing... ☕
-`);
-        } else {
-          addOutput(`${cmd}: command not found`);
-        }
-        break;
-
-      case 'ping':
-        addOutput('PONG! 🏓');
-        break;
-
-      case 'date':
-        addOutput(new Date().toString());
-        break;
-
-      case 'echo':
-        addOutput(arg || '');
-        break;
-
-      case 'neofetch':
-        addOutput(`
-        .---.        david@portfolio
-       /     \\       ---------------
-       \\.@-@./       OS: Portfolio 1.0
-       /\`\\_/\`\\       Host: React 18.2
-      //  _  \\\\      Kernel: TypeScript
-     | \\     )|_     Shell: dave-kav-sh
-    /\`\\_\`>  <_/ \\    Terminal: Living Terminal
-    \\__/'---'\\__/    Experience: 8+ years
-                     Focus: Backend & Distributed Systems
-`);
-        break;
-
-      case 'cowsay':
-        const cowMsg = arg || 'Hire me!';
-        addOutput(`
- ${'_'.repeat(cowMsg.length + 2)}
-< ${cowMsg} >
- ${'-'.repeat(cowMsg.length + 2)}
-        \\   ^__^
-         \\  (oo)\\_______
-            (__)\\       )\\/\\
-                ||----w |
-                ||     ||
-`);
-        break;
-
-      case 'sl':
-        addOutput(`
-      ====        ________                ___________
-  _D _|  |_______/        \\__I_I_____===__|_________|
-   |(_)---  |   H\\________/ |   |        =|___ ___|
-   /     |  |   H  |  |     |   |         ||_| |_||
-  |      |  |   H  |__--------------------| [___] |
-  | ________|___H__/__|_____/[][]~\\_______|       |
-  |/ |   |-----------I_____I [][] []  D   |=======|_
-__/ =| o |=-O=====O=====O=====O \\ ____Y___________|__
- |/-=|___|=    ||    ||    ||    |_____/~\\___/
-  \\_/      \\__/  \\__/  \\__/  \\__/      \\_/
-
-Choo choo! 🚂
-`);
-        break;
-
-      case 'matrix':
-        addOutput(`
-Wake up, Neo...
-The Matrix has you...
-Follow the white rabbit.
-
-🐇 Knock, knock, ${arg || 'developer'}...
-`);
-        break;
-
-      case 'fortune':
-        const fortunes = [
-          "You will debug a tricky issue today and feel immense satisfaction.",
-          "A great opportunity is coming your way. Keep coding!",
-          "The best time to refactor was yesterday. The second best time is now.",
-          "Your code will compile on the first try... eventually.",
-          "Someone will appreciate your clean commit messages today.",
-          "A rubber duck holds the answer you seek.",
-          "In the land of spaghetti code, the one with tests is king.",
-          "Today is a good day to learn a new keyboard shortcut.",
-          "The bug you're looking for is in the last place you'll look.",
-        ];
-        addOutput(`🔮 ${fortunes[Math.floor(Math.random() * fortunes.length)]}`);
-        break;
-
-      case 'man':
-        if (arg === 'dave' || arg === 'david') {
-          addOutput(`
-DAVE(1)                   Portfolio Manual                   DAVE(1)
-
-NAME
-       dave - Software Engineer specializing in backend systems
-
-SYNOPSIS
-       dave [OPTIONS] [PROJECT]
-
-DESCRIPTION
-       David Kavanagh is a software engineer with 8+ years of
-       experience building scalable backend systems and distributed
-       architectures. Currently working at Whatnot on financial
-       systems and data infrastructure.
-
-OPTIONS
-       --hire         Initiate hiring process (highly recommended)
-       --collaborate  Discuss interesting projects
-       --chat         Have a conversation about tech
-       --coffee       Schedule a coffee chat (Dublin area)
-
-SKILLS
-       Python, Rust, TypeScript, AWS, Snowflake, DBT, PostgreSQL,
-       Distributed Systems, Team Leadership
-
-EXAMPLES
-       dave --hire
-              Send an email to work@dave-kav.com
-
-SEE ALSO
-       github.com/dave-kav, linkedin.com/in/dave-kav
-
-AUTHOR
-       Written by years of debugging and coffee.
-
-Portfolio 1.0               2025                             DAVE(1)
-`);
-        } else if (arg) {
-          addOutput(`No manual entry for ${arg}`);
-        } else {
-          addOutput('What manual page do you want?\nTry: man dave');
-        }
-        break;
-
-      case 'uptime':
-        const startDate = new Date('2017-01-01');
-        const now = new Date();
-        const years = now.getFullYear() - startDate.getFullYear();
-        addOutput(`up ${years} years, career still going strong`);
-        break;
-
-      case 'top':
-        addOutput(`
-top - ${new Date().toLocaleTimeString()} up 8 years, load average: caffeinated
-
-  PID USER      PR  NI  PROCESS          %CPU  %MEM
-    1 dave       0   0  backend-dev      45.0  high
-    2 dave       0   0  system-design    25.0  med
-    3 dave       0   0  team-leadership  15.0  med
-    4 dave       0   0  code-review      10.0  low
-    5 dave       0   0  coffee-intake    99.9  max
-    6 dave       0   0  debugging         5.0  var
-`);
-        break;
-
-      case 'htop':
-        addOutput('htop: For the fancy version, see my GitHub contributions graph 📊');
-        break;
-
-      case '42':
-      case 'meaning':
-        addOutput('The answer to life, the universe, and everything.');
-        break;
-
-      case 'xkcd':
-        addOutput(`
-   ╭──────────────────────────╮
-   │ "It works on my machine" │
-   │   - Every developer ever │
-   ╰──────────────────────────╯
-
-Relevant XKCD: https://xkcd.com/1988/
-`);
-        break;
-
-      case 'lolcat':
-        addOutput('🌈 Y o u   a r e   a w e s o m e ! 🌈');
-        break;
-
-      case 'yes':
-        addOutput('yes yes yes... (Ctrl+C to stop, but this is a portfolio, so...)\n\nJust kidding! But yes, you should hire me.');
-        break;
-
-      case 'alias':
-        addOutput(`
-alias hire='echo "Sending email to work@dave-kav.com"'
-alias ll='ls -la'
-alias please='sudo'
-alias yeet='rm -rf'
-`);
-        break;
-
-      case 'motd':
-        addOutput(`
-╔══════════════════════════════════════════════════════════════╗
-║  Welcome to David's Portfolio Terminal                        ║
-║  ─────────────────────────────────────────────────────────── ║
-║  "Any sufficiently advanced technology is                     ║
-║   indistinguishable from magic." - Arthur C. Clarke          ║
-║                                                               ║
-║  Type 'help' for commands. Happy exploring!                   ║
-╚══════════════════════════════════════════════════════════════╝
-`);
-        break;
-
-      default:
-        addOutput(`${cmd}: command not found. Type 'help' for available commands.`);
+    if (!found) {
+      addOutput(`${cmd}: command not found. Type 'help' for available commands.`);
     }
-  };
+  }, [currentPath, filesystem, commandHistory, addOutput, clearHistoryFn, getCurrentDir, resolvePath, getPathCompletions]);
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const input = e.currentTarget;
+
     if (e.key === 'Enter') {
       processCommand(currentInput);
       setCurrentInput('');
@@ -792,9 +383,13 @@ alias yeet='rm -rf'
       }
     } else if (e.key === 'Tab') {
       e.preventDefault();
-      // Tab completion with path support
+      // Tab completion with path support - only if there's input
+      if (!currentInput.trim()) return;
+
       const parts = currentInput.split(' ');
       const partial = parts[parts.length - 1];
+      if (!partial) return; // No partial to complete
+
       const matches = getPathCompletions(partial);
 
       if (matches.length === 1) {
@@ -814,9 +409,53 @@ alias yeet='rm -rf'
         );
         setHistory(prev => [...prev, { type: 'output', content: output }]);
       }
-    } else if (e.key === 'l' && e.ctrlKey) {
-      e.preventDefault();
-      setHistory([]);
+    } else if (e.ctrlKey) {
+      switch (e.key) {
+        case 'l':
+          // Clear screen
+          e.preventDefault();
+          setHistory([]);
+          break;
+        case 'c':
+          // Cancel current input
+          e.preventDefault();
+          setHistory(prev => [...prev, { type: 'input', content: `${getPathString()} $ ${currentInput}^C` }]);
+          setCurrentInput('');
+          break;
+        case 'a':
+          // Move to start of line
+          e.preventDefault();
+          input.setSelectionRange(0, 0);
+          break;
+        case 'e':
+          // Move to end of line
+          e.preventDefault();
+          input.setSelectionRange(currentInput.length, currentInput.length);
+          break;
+        case 'u':
+          // Clear line before cursor
+          e.preventDefault();
+          const pos = input.selectionStart || 0;
+          setCurrentInput(currentInput.slice(pos));
+          setTimeout(() => input.setSelectionRange(0, 0), 0);
+          break;
+        case 'k':
+          // Clear line after cursor
+          e.preventDefault();
+          const kPos = input.selectionStart || 0;
+          setCurrentInput(currentInput.slice(0, kPos));
+          break;
+        case 'w':
+          // Delete word before cursor
+          e.preventDefault();
+          const wPos = input.selectionStart || 0;
+          const beforeCursor = currentInput.slice(0, wPos);
+          const afterCursor = currentInput.slice(wPos);
+          const newBefore = beforeCursor.replace(/\S+\s*$/, '');
+          setCurrentInput(newBefore + afterCursor);
+          setTimeout(() => input.setSelectionRange(newBefore.length, newBefore.length), 0);
+          break;
+      }
     }
   };
 
@@ -835,40 +474,62 @@ alias yeet='rm -rf'
   };
 
   return (
-    <div className="terminal" onClick={focusInput} ref={terminalRef}>
-      <div className="terminal__content">
-        {history.map((entry, i) => (
-          <div
-            key={i}
-            className={`terminal__line terminal__line--${entry.type}`}
-          >
-            {typeof entry.content === 'string' ? (
-              <pre>{entry.content}</pre>
-            ) : (
-              <div className="terminal__output">{entry.content}</div>
-            )}
-          </div>
-        ))}
-        <div className="terminal__input-line">
-          <span className="terminal__prompt">{getPathString()} $</span>
-          <input
-            ref={inputRef}
-            type="text"
-            className="terminal__input"
-            value={currentInput}
-            onChange={(e) => setCurrentInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            autoFocus
-            spellCheck={false}
-            autoComplete="off"
+    <div className="terminal-window">
+      {/* Title bar */}
+      <div className="terminal-window__titlebar">
+        <div className="terminal-window__buttons">
+          <a
+            href="https://dave-kav.com"
+            className="terminal-window__button terminal-window__button--close"
+            title="Back to dave-kav.com"
           />
+          <span className="terminal-window__button terminal-window__button--minimize" />
+          <span className="terminal-window__button terminal-window__button--maximize" />
+        </div>
+        <div className="terminal-window__title">dave-kav — zsh — 80×24</div>
+        <div className="terminal-window__spacer" />
+      </div>
+
+      {/* Terminal content */}
+      <div className="terminal" onClick={focusInput} ref={terminalRef}>
+        <div className="terminal__content">
+          {history.map((entry, i) => (
+            <div
+              key={i}
+              className={`terminal__line terminal__line--${entry.type}`}
+            >
+              {typeof entry.content === 'string' ? (
+                <pre>{entry.content}</pre>
+              ) : (
+                <div className="terminal__output">{entry.content}</div>
+              )}
+            </div>
+          ))}
+          <div className="terminal__input-line">
+            <span className="terminal__prompt">{getPathString()} $</span>
+            <input
+              ref={inputRef}
+              type="text"
+              className="terminal__input"
+              value={currentInput}
+              onChange={(e) => setCurrentInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              autoFocus
+              spellCheck={false}
+              autoComplete="off"
+            />
+          </div>
         </div>
       </div>
 
-      <div className="terminal__hint">
-        💡 Type <code>help</code> for commands, or <code>tree</code> to explore
-        <span className="terminal__hint-divider">•</span>
-        <a href="https://dave-kav.com" className="terminal__hint-link">dave-kav.com</a>
+      {/* Status bar */}
+      <div className="terminal-window__statusbar">
+        <span className="terminal-window__status-left">
+          {getPathString()}
+        </span>
+        <span className="terminal-window__status-right">
+          <a href="https://dave-kav.com" className="terminal-window__status-link">dave-kav.com</a>
+        </span>
       </div>
     </div>
   );
