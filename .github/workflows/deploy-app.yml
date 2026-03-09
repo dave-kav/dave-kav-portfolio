@@ -59,4 +59,4 @@ jobs:
         with:
           script: |
             const script = require('./.github/scripts/comment-preview-url.js');
-            await script({ github, context, app: '${{ inputs.app }}', branch: '${{ github.head_ref }}' });
+            await script({ github, context, app: '${{ inputs.app }}', url: '${{ steps.preview-deploy.outputs.deployment-url }}' });
