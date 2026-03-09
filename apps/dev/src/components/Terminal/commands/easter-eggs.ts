@@ -139,60 +139,6 @@ export const cowsayCommand: Command = {
   },
 };
 
-export const slCommand: Command = {
-  name: 'sl',
-  description: 'Steam locomotive',
-  handler: ({ addOutput }) => {
-    addOutput(`
-      ====        ________                ___________
-  _D _|  |_______/        \\__I_I_____===__|_________|
-   |(_)---  |   H\\________/ |   |        =|___ ___|
-   /     |  |   H  |  |     |   |         ||_| |_||
-  |      |  |   H  |__--------------------| [___] |
-  | ________|___H__/__|_____/[][]~\\_______|       |
-  |/ |   |-----------I_____I [][] []  D   |=======|_
-__/ =| o |=-O=====O=====O=====O \\ ____Y___________|__
- |/-=|___|=    ||    ||    ||    |_____/~\\___/
-  \\_/      \\__/  \\__/  \\__/  \\__/      \\_/
-
-Choo choo! 🚂
-`);
-  },
-};
-
-export const matrixCommand: Command = {
-  name: 'matrix',
-  description: 'Follow the white rabbit',
-  handler: ({ args, addOutput }) => {
-    addOutput(`
-Wake up, Neo...
-The Matrix has you...
-Follow the white rabbit.
-
-🐇 Knock, knock, ${args || 'developer'}...
-`);
-  },
-};
-
-export const fortuneCommand: Command = {
-  name: 'fortune',
-  description: 'Get your fortune',
-  handler: ({ addOutput }) => {
-    const fortunes = [
-      "You will debug a tricky issue today and feel immense satisfaction.",
-      "A great opportunity is coming your way. Keep coding!",
-      "The best time to refactor was yesterday. The second best time is now.",
-      "Your code will compile on the first try... eventually.",
-      "Someone will appreciate your clean commit messages today.",
-      "A rubber duck holds the answer you seek.",
-      "In the land of spaghetti code, the one with tests is king.",
-      "Today is a good day to learn a new keyboard shortcut.",
-      "The bug you're looking for is in the last place you'll look.",
-    ];
-    addOutput(`🔮 ${fortunes[Math.floor(Math.random() * fortunes.length)]}`);
-  },
-};
-
 export const manCommand: Command = {
   name: 'man',
   description: 'Manual pages',
@@ -268,38 +214,6 @@ export const htopCommand: Command = {
   description: 'Interactive process viewer',
   handler: ({ addOutput }) => {
     addOutput('htop: For the fancy version, see my GitHub contributions graph 📊');
-  },
-};
-
-export const meaningCommand: Command = {
-  name: '42',
-  aliases: ['meaning'],
-  description: 'The meaning of life',
-  handler: ({ addOutput }) => {
-    addOutput('The answer to life, the universe, and everything.');
-  },
-};
-
-export const xkcdCommand: Command = {
-  name: 'xkcd',
-  description: 'Relevant xkcd',
-  handler: ({ addOutput }) => {
-    addOutput(`
-   ╭──────────────────────────╮
-   │ "It works on my machine" │
-   │   - Every developer ever │
-   ╰──────────────────────────╯
-
-Relevant XKCD: https://xkcd.com/1988/
-`);
-  },
-};
-
-export const lolcatCommand: Command = {
-  name: 'lolcat',
-  description: 'Rainbow text',
-  handler: ({ addOutput }) => {
-    addOutput('🌈 Y o u   a r e   a w e s o m e ! 🌈');
   },
 };
 
