@@ -1,5 +1,7 @@
 module.exports = async ({ github, context, app, branch }) => {
-  const previewUrl = `https://${branch}.dave-kav-${app}.pages.dev`;
+  // Cloudflare converts slashes to hyphens in branch URLs
+  const sanitizedBranch = branch.replace(/\//g, '-');
+  const previewUrl = `https://${sanitizedBranch}.dave-kav-${app}.pages.dev`;
 
   const { data: comments } = await github.rest.issues.listComments({
     owner: context.repo.owner,
