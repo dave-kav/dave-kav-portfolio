@@ -1,4 +1,4 @@
-name: Deploy App
+name: Deploy App (Production)
 
 on:
   workflow_call:
@@ -36,27 +36,9 @@ jobs:
       - name: Build React App
         run: pnpm --filter @dave-kav/${{ inputs.app }} build
 
-      - name: Deploy to Cloudflare Pages (Production)
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: pages deploy apps/${{ inputs.app }}/build --project-name=dave-kav-${{ inputs.app }}
-
-      - name: Deploy to Cloudflare Pages (Preview)
-        id: preview-deploy
-        if: github.event_name == 'pull_request'
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy apps/${{ inputs.app }}/build --project-name=dave-kav-${{ inputs.app }} --branch=${{ github.head_ref }}
-
-      - name: Comment Preview URL on PR
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const script = require('./.github/scripts/comment-preview-url.js');
-            await script({ github, context, app: '${{ inputs.app }}', url: '${{ steps.preview-deploy.outputs.deployment-url }}' });

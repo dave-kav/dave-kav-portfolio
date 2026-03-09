@@ -17,8 +17,16 @@ permissions:
   pull-requests: write
 
 jobs:
-  deploy:
-    uses: ./.github/workflows/deploy-app.yml
+  deploy-preview:
+    if: github.event_name == 'pull_request'
+    uses: ./.github/workflows/deploy-app-preview.yml
+    with:
+      app: dev
+    secrets: inherit
+
+  deploy-production:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/deploy-app-production.yml
     with:
       app: dev
     secrets: inherit
