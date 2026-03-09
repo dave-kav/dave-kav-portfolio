@@ -1,4 +1,4 @@
-name: Deploy dave-kav.dev
+name: Deploy dave-kav.dev (Production)
 
 on:
   push:
@@ -8,9 +8,13 @@ on:
       - 'packages/config/**'
   workflow_dispatch:
 
+permissions:
+  contents: read
+  deployments: write
+
 jobs:
   deploy:
-    uses: ./.github/workflows/deploy-app.yml
+    uses: ./.github/workflows/deploy-app-production.yml
     with:
       app: dev
     secrets: inherit

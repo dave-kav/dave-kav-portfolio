@@ -1,8 +1,113 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
-.terminal {
+/* ==================== TERMINAL WINDOW ==================== */
+
+.terminal-window {
   position: fixed;
   inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: #0a0e14;
+}
+
+/* Title bar */
+.terminal-window__titlebar {
+  display: flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 12px;
+  background: linear-gradient(180deg, #3a3f4b 0%, #2d323c 100%);
+  border-bottom: 1px solid #1a1d24;
+  flex-shrink: 0;
+  -webkit-app-region: drag;
+}
+
+.terminal-window__buttons {
+  display: flex;
+  gap: 8px;
+  -webkit-app-region: no-drag;
+}
+
+.terminal-window__button {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: none;
+  cursor: default;
+}
+
+.terminal-window__button--close {
+  background: #ff5f56;
+  display: block;
+  cursor: pointer;
+}
+
+.terminal-window__button--close:hover {
+  background: #ff3b30;
+}
+
+.terminal-window__button--minimize {
+  background: #ffbd2e;
+}
+
+.terminal-window__button--maximize {
+  background: #27c93f;
+}
+
+.terminal-window__title {
+  flex: 1;
+  text-align: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: #9ca3af;
+  user-select: none;
+}
+
+.terminal-window__spacer {
+  width: 52px; /* Balance the buttons */
+}
+
+/* Status bar */
+.terminal-window__statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 28px;
+  padding: 0 16px;
+  background: #1a1d24;
+  border-top: 1px solid #2d323c;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: #626a73;
+  flex-shrink: 0;
+}
+
+.terminal-window__status-left {
+  color: #95e6cb;
+}
+
+.terminal-window__status-right {
+  display: flex;
+  gap: 16px;
+}
+
+.terminal-window__status-link {
+  color: #73d0ff;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.terminal-window__status-link:hover {
+  opacity: 0.8;
+  text-decoration: underline;
+}
+
+/* ==================== TERMINAL ==================== */
+
+.terminal {
+  flex: 1;
+  position: relative;
   background: #0a0e14;
   color: #b3b1ad;
   font-family: 'JetBrains Mono', 'SF Mono', 'Monaco', 'Consolas', monospace;
@@ -10,18 +115,17 @@
   line-height: 1.6;
   overflow-y: auto;
   cursor: text;
-  padding: 0;
 }
 
 /* Scanline effect */
 .terminal::before {
   content: '';
-  position: fixed;
+  position: absolute;
   inset: 0;
   background: repeating-linear-gradient(
     0deg,
-    rgba(0, 0, 0, 0.15),
-    rgba(0, 0, 0, 0.15) 1px,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.1) 1px,
     transparent 1px,
     transparent 2px
   );
@@ -29,24 +133,24 @@
   z-index: 10;
 }
 
-/* CRT glow effect */
+/* CRT vignette effect */
 .terminal::after {
   content: '';
-  position: fixed;
+  position: absolute;
   inset: 0;
   background: radial-gradient(
     ellipse at center,
     transparent 0%,
-    rgba(0, 0, 0, 0.3) 100%
+    rgba(0, 0, 0, 0.2) 100%
   );
   pointer-events: none;
   z-index: 5;
 }
 
 .terminal__content {
-  padding: 24px;
-  padding-bottom: 60px;
-  min-height: calc(100vh - 60px);
+  padding: 16px 24px;
+  padding-bottom: 24px;
+  min-height: 100%;
 }
 
 .terminal__line {
@@ -67,11 +171,6 @@
 
 .terminal__line--output {
   color: #b3b1ad;
-}
-
-/* Directory names in blue */
-.terminal__line--output pre {
-  color: inherit;
 }
 
 .terminal__output {
@@ -113,66 +212,7 @@
   font-family: inherit;
   font-size: inherit;
   caret-color: #73d0ff;
-}
-
-/* Blinking cursor effect */
-.terminal__input:focus {
-  animation: none;
-}
-
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-}
-
-.terminal__hint {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 12px 24px;
-  background: linear-gradient(to top, #0a0e14 80%, transparent);
-  color: #626a73;
-  font-size: 12px;
-  z-index: 20;
-}
-
-.terminal__hint code {
-  background: rgba(115, 208, 255, 0.1);
-  color: #73d0ff;
-  padding: 2px 6px;
-  border-radius: 3px;
-}
-
-.terminal__hint-divider {
-  margin: 0 12px;
-  opacity: 0.5;
-}
-
-.terminal__hint-link {
-  color: #73d0ff;
-  text-decoration: none;
-  opacity: 0.7;
-  transition: opacity 0.2s;
-}
-
-.terminal__hint-link:hover {
-  opacity: 1;
-  text-decoration: underline;
-}
-
-/* Syntax highlighting for output */
-.terminal__line--output pre {
-  /* Headers/titles */
-  --color-header: #ffb454;
-  /* Keywords */
-  --color-keyword: #ff8f40;
-  /* Strings */
-  --color-string: #c2d94c;
-  /* Numbers */
-  --color-number: #e6b450;
-  /* Comments */
-  --color-comment: #626a73;
+  caret-shape: block;
 }
 
 /* Selection */
@@ -182,7 +222,7 @@
 
 /* Scrollbar */
 .terminal::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
 
 .terminal::-webkit-scrollbar-track {
@@ -191,32 +231,59 @@
 
 .terminal::-webkit-scrollbar-thumb {
   background: #2d3640;
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 .terminal::-webkit-scrollbar-thumb:hover {
   background: #3d4751;
 }
 
-/* Mobile adjustments */
+/* ==================== MOBILE ==================== */
+
 @media (max-width: 768px) {
+  .terminal-window__titlebar {
+    height: 32px;
+    padding: 0 8px;
+  }
+
+  .terminal-window__buttons {
+    gap: 6px;
+  }
+
+  .terminal-window__button {
+    width: 10px;
+    height: 10px;
+  }
+
+  .terminal-window__title {
+    font-size: 12px;
+  }
+
+  .terminal-window__spacer {
+    width: 44px;
+  }
+
+  .terminal-window__statusbar {
+    height: 24px;
+    padding: 0 12px;
+    font-size: 10px;
+  }
+
   .terminal {
     font-size: 12px;
   }
 
   .terminal__content {
-    padding: 16px;
-  }
-
-  .terminal__hint {
-    padding: 10px 16px;
-    font-size: 11px;
+    padding: 12px 16px;
   }
 }
 
-/* Responsive font scaling */
 @media (max-width: 480px) {
   .terminal {
     font-size: 11px;
+  }
+
+  .terminal__content {
+    padding: 10px 12px;
   }
 }

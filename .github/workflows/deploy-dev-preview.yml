@@ -1,0 +1,19 @@
+name: Deploy dave-kav.dev (Preview)
+
+on:
+  pull_request:
+    paths:
+      - 'apps/dev/**'
+      - 'packages/config/**'
+
+permissions:
+  contents: read
+  deployments: write
+  pull-requests: write
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy-app-preview.yml
+    with:
+      app: dev
+    secrets: inherit

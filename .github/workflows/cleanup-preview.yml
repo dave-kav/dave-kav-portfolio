@@ -1,0 +1,25 @@
+name: Cleanup Preview Deployments
+
+on:
+  pull_request:
+    types: [closed]
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+      pull-requests: write
+    strategy:
+      matrix:
+        app: [com, dev]
+
+    steps:
+      - name: Delete Preview Deployment
+        uses: andykenward/github-actions-cloudflare-pages/delete@v3.0.0
+        with:
+          cloudflare-api-token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          cloudflare-account-id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          cloudflare-project-name: dave-kav-${{ matrix.app }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
