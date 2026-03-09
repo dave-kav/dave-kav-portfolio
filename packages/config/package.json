@@ -2,16 +2,19 @@
   "name": "@dave-kav/config",
   "version": "1.0.0",
   "description": "Shared config data for dave-kav portfolio",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "exports": {
-    ".": "./index.ts",
-    "./data/*": "./data/*"
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
   },
   "files": [
-    "index.ts",
+    "dist",
     "data"
   ],
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  },
   "author": "David Kavanagh",
   "license": "MIT"
 }
