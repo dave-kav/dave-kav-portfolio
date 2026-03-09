@@ -4,14 +4,17 @@ import {
   projectsData,
   blogsData,
   profileData,
-  type ExperienceItem,
-  type EducationItem,
-  type ProjectItem,
-  type BlogItem,
-  type ExperienceData,
-  type EducationData,
-  type ProjectsData,
-  type BlogsData,
+} from '@dave-kav/config';
+
+import type {
+  ExperienceItem,
+  EducationItem,
+  ProjectItem,
+  BlogItem,
+  ExperienceData,
+  EducationData,
+  ProjectsData,
+  BlogsData,
 } from '@dave-kav/config';
 
 const configMap: Record<string, unknown> = {

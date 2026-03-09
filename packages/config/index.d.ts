@@ -1,15 +1,3 @@
-import experience from './data/experience.json';
-import education from './data/education.json';
-import projects from './data/projects.json';
-import blogs from './data/blogs.json';
-import profile from './data/profile.json';
-
-export const experienceData = experience;
-export const educationData = education;
-export const projectsData = projects;
-export const blogsData = blogs;
-export const profileData = profile;
-
 export type ExperienceItem = {
   id: number;
   company: string;
@@ -77,3 +65,9 @@ export type ExperienceData = { experiences: ExperienceItem[] };
 export type EducationData = { education: EducationItem[] };
 export type ProjectsData = { projects: ProjectItem[] };
 export type BlogsData = { blogs: BlogItem[] };
+
+export const experienceData: ExperienceData;
+export const educationData: EducationData;
+export const projectsData: ProjectsData;
+export const blogsData: BlogsData;
+export const profileData: ProfileData;

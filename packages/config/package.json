@@ -2,8 +2,8 @@
   "name": "@dave-kav/config",
   "version": "1.0.0",
   "description": "Shared config data for dave-kav portfolio",
-  "main": "index.ts",
-  "types": "index.ts",
+  "main": "index.js",
+  "types": "index.d.ts",
   "exports": {
     ".": "./index.ts",
     "./data/*": "./data/*"
