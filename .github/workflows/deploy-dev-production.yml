@@ -1,0 +1,19 @@
+name: Deploy dave-kav.dev (Production)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/dev/**'
+      - 'packages/config/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    uses: ./.github/workflows/deploy-app-production.yml
+    with:
+      app: dev
+    secrets: inherit
