@@ -32,11 +32,35 @@ pnpm dev:dev    # Run dave-kav.dev locally
 
 ## Deployment
 
+All deployments are automated via GitHub Actions on push to `main`.
+
 | App | Trigger Paths | Target |
 |-----|---------------|--------|
 | com | `apps/com/**`, `packages/config/**` | Cloudflare Pages |
 | dev | `apps/dev/**`, `packages/config/**` | Cloudflare Pages |
 | resume | `apps/resume/**`, `packages/config/data/**` | Cloudflare R2 |
+
+### Manual Deployment
+
+Workflows can be triggered manually from the Actions tab or via CLI:
+
+```bash
+gh workflow run deploy-com.yml
+gh workflow run deploy-dev.yml
+gh workflow run build-resume.yml
+```
+
+### Required Secrets
+
+| Secret | Used By |
+|--------|---------|
+| `CLOUDFLARE_API_TOKEN` | All workflows |
+| `CLOUDFLARE_ACCOUNT_ID` | All workflows |
+
+### Cloudflare Setup
+
+- **Pages projects**: `dave-kav-com`, `dave-kav-dev` (direct upload via wrangler)
+- **R2 bucket**: `dave-kav-resume` with public access enabled
 
 ## URLs
 
