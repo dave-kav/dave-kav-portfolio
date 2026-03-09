@@ -108,6 +108,10 @@ const CommandPalette: React.FC = () => {
   }, []);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
+    // Don't trigger shortcuts when typing in an input
+    const target = e.target as HTMLElement;
+    const isTyping = target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable;
+
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
       e.preventDefault();
       setIsOpen((prev) => {
@@ -118,6 +122,13 @@ const CommandPalette: React.FC = () => {
         return !prev;
       });
     }
+
+    // `.` shortcut to open terminal (only when not typing and palette closed)
+    if (e.key === '.' && !isTyping && !isOpen) {
+      window.open('https://dave-kav.dev', '_blank');
+      return;
+    }
+
     if (!isOpen) return;
 
     if (e.key === 'Escape') {
@@ -198,11 +209,12 @@ const CommandPalette: React.FC = () => {
             transition={{ duration: 0.15 }}
           >
             <div className="command-palette__header">
+              <span className="command-palette__search-icon">⌘</span>
               <input
                 ref={inputRef}
                 type="text"
                 className="command-palette__input"
-                placeholder="Type to filter..."
+                placeholder="Search actions..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
               />

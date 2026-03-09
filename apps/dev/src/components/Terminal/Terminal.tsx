@@ -183,33 +183,6 @@ ${proj.repo ? `REPO: ${proj.repo}` : ''}
   return fs;
 };
 
-const ASCII_BANNER = `
-    ____              _     __   __ __                                __
-   / __ \\____ __   __(_)___/ /  / //_/___ __   _____  ____  ____ _____ / /_
-  / / / / __ \`/ | / / / __  /  / ,<  / __ \`/ | / / _ \\/ __ \\/ __ \`/ __ \\/ __ \\
- / /_/ / /_/ /| |/ / / /_/ /  / /| |/ /_/ /| |/ /  __/ / / / /_/ / /_/ / / / /
-/_____/\\__,_/ |___/_/\\__,_/  /_/ |_|\\__,_/ |___/\\___/_/ /_/\\__,_/\\__, /_/ /_/
-                                                                /____/
-`;
-
-const MOBILE_BANNER = `
-┌─────────────────────────────┐
-│     DAVID KAVANAGH          │
-│     Software Engineer       │
-└─────────────────────────────┘
-`;
-
-const getWelcomeMessage = (isMobile: boolean) => `${isMobile ? MOBILE_BANNER : ASCII_BANNER}
-Welcome to my interactive portfolio terminal!
-
-Type 'help' for available commands, or start exploring:
-  • ls           - list files and directories
-  • cd <dir>     - change directory
-  • cat <file>   - read a file
-  • tree         - show directory structure
-
-`;
-
 const HELP_TEXT = `
 Available commands:
   help              Show this help message
@@ -267,13 +240,13 @@ export const Terminal: React.FC = () => {
   const terminalRef = useRef<HTMLDivElement>(null);
   const initializedRef = useRef(false);
 
-  // Set initial welcome message on mount
+  // Initialize terminal - start with empty history (just the prompt)
   useEffect(() => {
     if (!initializedRef.current) {
       initializedRef.current = true;
-      setHistory([{ type: 'output', content: getWelcomeMessage(isMobile) }]);
+      setHistory([]);
     }
-  }, [isMobile]);
+  }, []);
 
   const getCurrentDir = useCallback((): FileSystem | string => {
     let current: FileSystem | string = filesystem;

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { fetchRSSFeed } from '../utils/rssFetcher';
 import { BlogPost } from '../types/blog';
-import '../styles/bento.css';
+import '../styles/home.css';
 
 const BlogsPage: FC = () => {
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
@@ -36,7 +36,7 @@ const BlogsPage: FC = () => {
   };
 
   return (
-    <main className="bento">
+    <main className="home">
       {/* Header */}
       <header className="blogs__header">
         <Link to="/" className="blogs__back">&larr; Back</Link>
@@ -104,9 +104,9 @@ const BlogsPage: FC = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bento__footer">
+      <footer className="home__footer">
         <span>&copy; {new Date().getFullYear()} David Kavanagh</span>
-        <span className="bento__footer-hint">Press ⌘K for options</span>
+        <span className="home__footer-hint">Press ⌘K for options</span>
       </footer>
     </main>
   );

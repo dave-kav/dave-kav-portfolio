@@ -6,7 +6,7 @@ import BlogsPage from './pages/BlogsPage';
 import CommandPalette from './components/CommandPalette';
 import './styles/variables.css';
 import './styles/global.css';
-import './styles/bento.css';
+import './styles/home.css';
 import './App.css';
 
 function App() {
