@@ -64,7 +64,7 @@ const CommandPalette: React.FC = () => {
       label: 'Download CV',
       icon: '↓',
       action: () => {
-        window.open('https://pub-6c7cf0c817ad49ecaa8fa77083a1a590.r2.dev/resume.pdf', '_blank');
+        window.open('https://davidkavanagh.work/resume.pdf', '_blank');
       },
     },
   ];

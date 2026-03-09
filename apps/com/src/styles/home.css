@@ -17,11 +17,13 @@
 /* Hero - Dramatic entrance */
 .home__hero {
   height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   padding: 0 8vw 12vh;
   position: relative;
+  background: #fafafa;
 }
 
 .home__hero h1 {
@@ -381,7 +383,9 @@
 /* Mobile */
 @media (max-width: 768px) {
   .home__hero {
-    padding: 0 6vw 8vh;
+    padding: 0 6vw 12vh;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
 
   .home__hero h1 span {

@@ -66,4 +66,4 @@ gh workflow run build-resume.yml
 
 - https://dave-kav.com
 - https://dave-kav.dev
-- https://pub-6c7cf0c817ad49ecaa8fa77083a1a590.r2.dev/resume.pdf
+- https://davidkavanagh.work/resume.pdf
