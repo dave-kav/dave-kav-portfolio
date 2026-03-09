@@ -127,7 +127,7 @@ const HomePage = () => {
       {/* Footer */}
       <footer className="home__footer">
         <span className="home__footer-hint">Press ⌘K for options · Press . for terminal</span>
-        <a href="https://davidkavanagh.work/resume.pdf" target="_blank" rel="noopener noreferrer">Download CV</a>
+        <a href="https://davidkavanagh.work" target="_blank" rel="noopener noreferrer">Download CV</a>
       </footer>
     </main>
   );
