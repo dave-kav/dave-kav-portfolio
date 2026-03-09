@@ -127,7 +127,7 @@ const HomePage = () => {
       {/* Footer */}
       <footer className="bento__footer">
         <span className="bento__footer-hint">Press ⌘K for options</span>
-        <a href="https://e176e82e7e125f4726a76dd364ecb66b.r2.cloudflarestorage.com/dave-kav-resume/resume.pdf" target="_blank" rel="noopener noreferrer">Download CV</a>
+        <a href="https://pub-6c7cf0c817ad49ecaa8fa77083a1a590.r2.dev/resume.pdf" target="_blank" rel="noopener noreferrer">Download CV</a>
       </footer>
     </main>
   );

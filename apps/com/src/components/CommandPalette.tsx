@@ -62,7 +62,7 @@ const CommandPalette: React.FC = () => {
       label: 'Download CV',
       icon: '↓',
       action: () => {
-        window.open('https://e176e82e7e125f4726a76dd364ecb66b.r2.cloudflarestorage.com/dave-kav-resume/resume.pdf', '_blank');
+        window.open('https://pub-6c7cf0c817ad49ecaa8fa77083a1a590.r2.dev/resume.pdf', '_blank');
       },
     },
   ];

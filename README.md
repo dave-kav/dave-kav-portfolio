@@ -127,4 +127,4 @@ cd apps/resume && node scripts/generate.js
 
 - **dave-kav.com**: https://dave-kav.com
 - **dave-kav.dev**: https://dave-kav.dev
-- **Resume PDF**: https://e176e82e7e125f4726a76dd364ecb66b.r2.cloudflarestorage.com/dave-kav-resume/resume.pdf
+- **Resume PDF**: https://pub-6c7cf0c817ad49ecaa8fa77083a1a590.r2.dev/resume.pdf
