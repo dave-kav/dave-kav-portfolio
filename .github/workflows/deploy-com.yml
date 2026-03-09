@@ -6,6 +6,10 @@ on:
     paths:
       - 'apps/com/**'
       - 'packages/config/**'
+  pull_request:
+    paths:
+      - 'apps/com/**'
+      - 'packages/config/**'
   workflow_dispatch:
 
 jobs:
