@@ -1,4 +1,5 @@
 export interface ExperienceItem {
+  type: 'work';
   id: number;
   company: string;
   role: string;
@@ -11,6 +12,7 @@ export interface ExperienceItem {
 }
 
 export interface EducationItem {
+  type: 'education';
   id: number;
   school: string;
   degree: string;
@@ -21,6 +23,8 @@ export interface EducationItem {
   courses?: string[];
   logo?: string;
 }
+
+export type TimelineItem = ExperienceItem | EducationItem;
 
 export interface ProjectItem {
   id: number;

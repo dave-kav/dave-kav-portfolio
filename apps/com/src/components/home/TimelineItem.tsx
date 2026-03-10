@@ -1,21 +1,29 @@
 import React from 'react';
-import { Experience } from '../../types/experience';
+import { TimelineItem as TimelineItemType } from '../../types/experience';
 
 interface TimelineItemProps {
-  experience: Experience;
+  item: TimelineItemType;
 }
 
-const TimelineItem = ({ experience }: TimelineItemProps) => {
+const TimelineItem = ({ item }: TimelineItemProps) => {
+  const isEducation = item.type === 'education';
+  const title = isEducation ? item.school : item.company;
+  const subtitle = isEducation ? item.degree : item.role;
+  const tags = isEducation ? item.courses : item.technologies;
+  const logo = item.logo;
+
   return (
     <div className="home__timeline-item">
-      <img src={experience.logo} alt={experience.company} className="home__timeline-logo" />
+      {logo && <img src={logo} alt={title} className="home__timeline-logo" />}
       <div className="home__timeline-content">
-        <h4>{experience.company}</h4>
-        <p className="role">{experience.role}</p>
-        <p>{experience.description}</p>
-        <p className="home__tech">{experience.technologies.join(' · ')}</p>
+        <h4>{title}</h4>
+        <p className="role">{subtitle}</p>
+        <p>{item.description}</p>
+        {tags && tags.length > 0 && (
+          <p className="home__tech">{tags.join(' · ')}</p>
+        )}
       </div>
-      <div className="home__timeline-year">{experience.period}</div>
+      <div className="home__timeline-year">{item.period}</div>
     </div>
   );
 };

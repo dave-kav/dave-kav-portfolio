@@ -1,16 +1,16 @@
 import React from 'react';
-import { Experience } from '../../types/experience';
+import { TimelineItem as TimelineItemType } from '../../types/experience';
 import TimelineItem from './TimelineItem';
 
 interface TimelineSectionProps {
-  experiences: Experience[];
+  items: TimelineItemType[];
 }
 
-const TimelineSection = ({ experiences }: TimelineSectionProps) => {
+const TimelineSection = ({ items }: TimelineSectionProps) => {
   return (
     <section className="home__timeline">
-      {experiences.map((experience) => (
-        <TimelineItem key={experience.id} experience={experience} />
+      {items.map((item) => (
+        <TimelineItem key={`${item.type}-${item.id}`} item={item} />
       ))}
     </section>
   );

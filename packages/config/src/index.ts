@@ -2,6 +2,7 @@
 export type {
   ExperienceItem,
   EducationItem,
+  TimelineItem,
   ProjectItem,
   BlogItem,
   Profile,

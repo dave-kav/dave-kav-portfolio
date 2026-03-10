@@ -2,6 +2,7 @@ import type { ExperienceItem } from '../types.js';
 
 export const experiences: ExperienceItem[] = [
   {
+    type: 'work',
     id: 1,
     company: 'Whatnot',
     role: 'Software Engineer',
@@ -18,6 +19,7 @@ export const experiences: ExperienceItem[] = [
     logo: '/logos/whatnot.png',
   },
   {
+    type: 'work',
     id: 2,
     company: 'Evervault',
     role: 'Lead Engineer, Payments',
@@ -35,6 +37,7 @@ export const experiences: ExperienceItem[] = [
     logo: '/logos/evervault.svg',
   },
   {
+    type: 'work',
     id: 3,
     company: 'Apata',
     role: 'Senior Software Engineer',
@@ -50,6 +53,7 @@ export const experiences: ExperienceItem[] = [
     logo: '/logos/apata.svg',
   },
   {
+    type: 'work',
     id: 4,
     company: 'Salesforce',
     role: 'Software Engineer',
@@ -65,6 +69,7 @@ export const experiences: ExperienceItem[] = [
     logo: '/logos/salesforce.png',
   },
   {
+    type: 'work',
     id: 5,
     company: 'Workday',
     role: 'Software Engineer - Distributed Systems',
@@ -80,6 +85,7 @@ export const experiences: ExperienceItem[] = [
     logo: '/logos/workday.svg',
   },
   {
+    type: 'work',
     id: 6,
     company: 'Qumas/Dassault Systemes',
     role: 'Software Development Intern',
