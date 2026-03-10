@@ -2,6 +2,7 @@ import type { EducationItem } from '../types.js';
 
 export const education: EducationItem[] = [
   {
+    type: 'education',
     id: 1,
     school: 'University College Dublin',
     degree: 'Professional Academy Diploma in Leadership and Management',
@@ -24,6 +25,7 @@ export const education: EducationItem[] = [
     logo: '/logos/dcu.png',
   },
   {
+    type: 'education',
     id: 2,
     school: 'Munster Technological University',
     degree: 'Bachelor of Science in Computer Science',
