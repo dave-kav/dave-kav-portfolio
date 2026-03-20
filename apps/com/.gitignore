@@ -21,7 +21,4 @@ dist/
 .DS_Store
 Thumbs.db
 
-# Synced from config repo (run ./scripts/sync-config.sh)
 src/data/*.json
-public/logos/*
-!public/logos/.gitkeep
